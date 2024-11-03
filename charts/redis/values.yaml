@@ -1,0 +1,18 @@
+appName: redis
+appReplicas: 1
+appImage: redis
+appVersion: alpine
+containerPort: 6379
+volumeName: redis-data
+containerMountPath: /data
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 64Mi
+  limits:
+    cpu: 200m
+    memory: 128Mi
+
+serviceType: ClusterIP
+servicePort: 6379

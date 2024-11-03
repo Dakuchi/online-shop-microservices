@@ -1,0 +1,18 @@
+appName: productcatalogservice
+appReplicas: 1
+appImage: gcr.io/google-samples/microservices-demo/productcatalogservice
+appVersion: v0.10.1
+containerPort: 3550
+containerEnvVars:
+  - name: PORT
+    value: "3550"
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 64Mi
+  limits:
+    cpu: 200m
+    memory: 128Mi
+
+servicePort: 3550

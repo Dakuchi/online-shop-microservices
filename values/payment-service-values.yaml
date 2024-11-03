@@ -1,0 +1,20 @@
+appName: paymentservice
+appReplicas: 1
+appImage: gcr.io/google-samples/microservices-demo/paymentservice
+appVersion: v0.10.1
+containerPort: 50051
+containerEnvVars:
+  - name: PORT
+    value: "50051"
+  - name: DISABLE_PROFILER
+    value: "1"
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 64Mi
+  limits:
+    cpu: 200m
+    memory: 128Mi
+
+servicePort: 50051

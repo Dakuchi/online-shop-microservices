@@ -1,0 +1,18 @@
+appName: emailservice
+appReplicas: 1
+appImage: gcr.io/google-samples/microservices-demo/emailservice
+appVersion: v0.10.1
+containerPort: 8080
+containerEnvVars:
+  - name: PORT
+    value: "8080"
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 64Mi
+  limits:
+    cpu: 200m
+    memory: 128Mi
+
+servicePort: 5000

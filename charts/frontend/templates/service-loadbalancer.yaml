@@ -1,0 +1,16 @@
+{{- if .Values.loadBalancerService.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.appName }}-external
+  labels:
+    app: {{ .Values.appName }}
+spec:
+  type: LoadBalancer
+  selector:
+    app: {{ .Values.appName }}
+  ports:
+    - name: http
+      port: {{ .Values.servicePort }}
+      targetPort: {{ .Values.containerPort }}
+{{- end }}

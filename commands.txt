@@ -1,0 +1,86 @@
+# deploy microservices using kubectl
+kubectl apply -f config.yaml -n microservice
+
+# delete the microservices using kubectl
+kubectl delete -f config.yaml -n microservice
+
+# create helm chart for microservices
+helm create microservice-helm
+helm create redis
+helm create frontend
+
+# verify the helm template syntax
+helm template -f email-service-value.yaml microservice-helm
+helm install --dry-run -f values/redis-values.yaml rediscart charts/redis/
+
+# install releases using helmfile
+helmfile sync
+
+# uninstall releases using helmfile
+helmfile destroy
+
+helm uninstall prometheus -n monitoring
+
+===================================
+
+# install prometheus stacks
+helm install prometheus prometheus-community/kube-prometheus-stack -f values.yaml -n monitoring --create-namespace
+
+# show default prometheus helm values.
+helm show values prometheus-community/prometheus > values.yaml
+
+# forward prometheus monitoring port
+kubectl port-forward --address 0.0.0.0 service/prometheus-kube-prometheus-prometheus -n monitoring 9090:9090 &
+
+# forward grafana port
+kubectl port-forward --address 0.0.0.0 svc/prometheus-grafana -n monitoring 8080:80 &
+
+# apply prometheus alert rules
+kubectl apply -f alert-rules.yaml
+
+# get the prometheusrule
+kubectl get PrometheusRule -n monitoring
+
+# check the config-reloader logs
+kubectl logs prometheus-prometheus-kube-prometheus-prometheus-0 -n monitoring -c config-reloader
+
+# deploy cpu stress container
+kubectl run curl-test --image=radial/busyboxplus:curl -i --tty --rm
+
+# deploy cpu stress container
+kubectl run cpu-test --namespace=monitoring --image=containerstack/cpustress -- --cpu 4 --timeout 60s --metrics-brief
+
+# get grafana username 
+kubectl get secret prometheus-grafana -n monitoring -o jsonpath='{.data.admin-user}' | base64 --decode
+
+# get grafana password 
+kubectl get secret prometheus-grafana -n monitoring -o jsonpath="{.data.admin-password}" | base64 --decode
+
+
+
+=========================================
+
+kubectl get PrometheusRule -n monitoring
+
+kubectl describe PrometheusRule main-rules -n monitoring
+
+kubectl logs prometheus-prometheus-kube-prometheus-prometheus-0 -n monitoring -c config-reloader
+
+==================================== Alert Manager    ================================
+
+
+# forward alertmanager port
+kubectl port-forward --address 0.0.0.0 svc/prometheus-kube-prometheus-alertmanager -n monitoring 9093:9093 &
+
+# get alertmanager secret
+kubectl get secret alertmanager-monitoring-kube-prometheus-alertmanager-generated -n monitoring -o yaml | less
+
+kubectl describe pods -n monitoring prometheus-prometheus-kube-prometheus-prometheus-0
+
+==================================== Redis exporter ===================================
+
+# install redis exporter with value
+helm install redis-exporter prometheus/prometheus-redis-exporter -f redis-value.yaml
+
+# increase redis replicas
+kubectl edit deployment redis-cart

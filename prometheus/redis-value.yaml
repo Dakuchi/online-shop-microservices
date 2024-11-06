@@ -1,0 +1,8 @@
+# enable serviceMonitor
+serviceMonitor:
+  enabled: true
+  labels:
+    release: prometheus
+
+# redis service address
+redisAddress: redis://redis-cart:6379

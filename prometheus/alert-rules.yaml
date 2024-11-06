@@ -3,6 +3,7 @@ kind: PrometheusRule
 metadata:
   name: main-rules
   #namespace: monitoring
+  # labels for prometheus selector
   labels:
     app: kube-prometheus-stack
     release: prometheus

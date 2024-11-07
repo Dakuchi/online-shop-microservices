@@ -1,3 +1,12 @@
+################################## Install helmfile ###########################
+
+wget https://github.com/helmfile/helmfile/releases/download/v0.169.1/helmfile_0.169.1_linux_amd64.tar.gz -O helmfile.tar.gz
+tar -xzvf helmfile.tar.gz
+sudo mv helmfile /usr/local/bin
+rm helmfile.tar.gz
+
+############################################################################################################
+
 # deploy microservices using kubectl
 kubectl apply -f config.yaml -n microservice
 
@@ -21,10 +30,10 @@ helmfile destroy
 
 helm uninstall prometheus -n monitoring
 
-===================================
+###################################
 
 # install prometheus stacks
-helm install prometheus prometheus-community/kube-prometheus-stack -f values.yaml -n monitoring --create-namespace
+helm install prometheus prometheus-community/kube-prometheus-stack -f prometheus-values.yaml -n monitoring
 
 # show default prometheus helm values.
 helm show values prometheus-community/prometheus > values.yaml
@@ -58,7 +67,9 @@ kubectl get secret prometheus-grafana -n monitoring -o jsonpath="{.data.admin-pa
 
 
 
-=========================================
+###################################### Prometheus helm ######################################
+
+helm install prometheus prometheus-community/kube-prometheus-stack -f prometheus-values.yaml -n monitoring
 
 kubectl get PrometheusRule -n monitoring
 
@@ -66,7 +77,7 @@ kubectl describe PrometheusRule main-rules -n monitoring
 
 kubectl logs prometheus-prometheus-kube-prometheus-prometheus-0 -n monitoring -c config-reloader
 
-==================================== Alert Manager    ================================
+#################################### Alert Manager    ################################
 
 
 # forward alertmanager port
@@ -77,10 +88,14 @@ kubectl get secret alertmanager-monitoring-kube-prometheus-alertmanager-generate
 
 kubectl describe pods -n monitoring prometheus-prometheus-kube-prometheus-prometheus-0
 
-==================================== Redis exporter ===================================
+#################################### Redis exporter ###################################
 
 # install redis exporter with value
 helm install redis-exporter prometheus/prometheus-redis-exporter -f redis-value.yaml
 
 # increase redis replicas
 kubectl edit deployment redis-cart
+
+#################################### Create secret ###################################
+kubectl create secret docker-registry my-registry-key --docker-server=https://index.docker.io/v1/ --docker-username=dakuchi --docker-password=xxxxxx
+

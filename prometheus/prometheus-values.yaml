@@ -978,7 +978,7 @@ grafana:
   ##
   defaultDashboardsEditable: true
 
-  adminPassword: prom-operator
+  adminPassword: datiker3
 
   rbac:
     ## If true, Grafana PSPs will be created

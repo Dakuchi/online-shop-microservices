@@ -10,7 +10,7 @@ spec:
     - name: redis.rules
       rules:
       - alert: RedisDown
-        expr: redis_up == 0
+        expr: absent(redis_up) OR redis_up == 0
         for: 0m
         labels:
           severity: critical

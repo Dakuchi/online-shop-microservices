@@ -7,6 +7,9 @@ rm helmfile.tar.gz
 
 ############################################################################################################
 
+# explain about the object
+kubectl explain pod.spec.restartPolicy
+
 # deploy microservices using kubectl
 kubectl apply -f config.yaml -n microservice
 

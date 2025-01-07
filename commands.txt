@@ -6,6 +6,8 @@ sudo mv helmfile /usr/local/bin
 rm helmfile.tar.gz
 
 ############################################################################################################
+# print the supported API resources
+kubectl api-resources
 
 # get pods resources
 kubectl top pods

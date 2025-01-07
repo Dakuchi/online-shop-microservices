@@ -7,6 +7,9 @@ rm helmfile.tar.gz
 
 ############################################################################################################
 
+# get pods resources
+kubectl top pods
+
 # explain about the object
 kubectl explain pod.spec.restartPolicy
 

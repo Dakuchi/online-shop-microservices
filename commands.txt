@@ -6,6 +6,9 @@ sudo mv helmfile /usr/local/bin
 rm helmfile.tar.gz
 
 ############################################################################################################
+# debug pod has no shell
+kubectl debug -it blue-green-77bcd65d56-c7s2j --image=busybox
+
 # differences between files vs actual state
 kubectl diff -f deployment.yaml
 
